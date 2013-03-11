@@ -6,7 +6,6 @@ import codecs, locale, sys
 
 googleapi = "http://maps.googleapis.com/maps/api/geocode/json?latlng={},{}&sensor=false"
 soup = BeautifulSoup(urllib2.urlopen('http://sfbay.craigslist.org/search/apa/nby?zoomToPosting=&altView=&query=&srchType=A&minAsk=&maxAsk=&bedrooms=&nh=99&nh=117&nh=103&nh=105'))
-concurrent = 10
 
 results = []
 while True:
@@ -28,8 +27,10 @@ while True:
     parsedurl = soup('h4', {'class':'ban'})[0]('span', {'style':'float: right;'})[0]('a')[0].get('href')
     soup = BeautifulSoup(urllib2.urlopen(parsedurl))
 
-print "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format('rent', 'bed', 'sqft', 'post_date', 'neighborhood', 'address', 'title', 'link', 'latitude', 'longitude')
+# Spent a long time trying to figure out why I was getting a decode error
+# Turns out redirecting outputs changes your preferred encoding. ;_;
 sys.stdout = codecs.getwriter(locale.getpreferredencoding())(sys.stdout)
+print "{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}\t{}".format('rent', 'bed', 'sqft', 'post_date', 'neighborhood', 'address', 'title', 'link', 'latitude', 'longitude')
 for x in results:
     if x.get('latitude', '0') != '0':
         page = urllib2.urlopen(googleapi.format(x.get('latitude'), x.get('longitude')))
