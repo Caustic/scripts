@@ -9,7 +9,7 @@ soup = BeautifulSoup(urllib2.urlopen('http://sfbay.craigslist.org/search/apa/nby
 concurrent = 10
 
 results = []
-while(soup('h4', {'class':'ban'})[0]('span', {'style':'float: right;'})[0]('a')):
+while True:
     for l in soup('p', {'class':'row'}):
         record = {}
         rent_bed_sqft = l('span', {'class': 'itemph'})[0].text
@@ -23,6 +23,8 @@ while(soup('h4', {'class':'ban'})[0]('span', {'style':'float: right;'})[0]('a'))
         record['latitude'] = l.get('data-latitude')
         record['longitude'] = l.get('data-longitude')
         results.append(record)
+    if not soup('h4', {'class':'ban'})[0]('span', {'style':'float: right;'})[0]('a'):
+        break
     parsedurl = soup('h4', {'class':'ban'})[0]('span', {'style':'float: right;'})[0]('a')[0].get('href')
     soup = BeautifulSoup(urllib2.urlopen(parsedurl))
 
