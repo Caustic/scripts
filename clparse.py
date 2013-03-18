@@ -22,9 +22,9 @@ while True:
         record['latitude'] = l.get('data-latitude')
         record['longitude'] = l.get('data-longitude')
         results.append(record)
-    if not soup('h4', {'class':'ban'})[0]('span', {'style':'float: right;'})[0]('a'):
+    if not soup('h4', {'class':'ban resultshdr'})[0]('span', {'class':'nplink next'})[0]('a'):
         break
-    parsedurl = soup('h4', {'class':'ban'})[0]('span', {'style':'float: right;'})[0]('a')[0].get('href')
+    parsedurl = soup('h4', {'class':'ban resultshdr'})[0]('span', {'class':'nplink next'})[0]('a')[0].get('href')
     soup = BeautifulSoup(urllib2.urlopen(parsedurl))
 
 # Spent a long time trying to figure out why I was getting a decode error
